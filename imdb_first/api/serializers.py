@@ -1,11 +1,20 @@
 from rest_framework import serializers # type: ignore
-from imdb_first.models import WatchList,StreamPlatform
+from imdb_first.models import WatchList,StreamPlatform,Review
 #from rest_framework import Modelserializer
+
+class ReviewSerializer(serializers.ModelSerializer):
+    #watchlist = RSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Review
+        fields = "__all__"   
+        
 
 class WatchListSerializer(serializers.ModelSerializer):
     #len_name = serializers.SerializerMethodField()
     # def get_len_name(self,object):
     #     return len(object.name)
+    reviews = ReviewSerializer(many=True,read_only=True)
     
     class Meta:
         model = WatchList
@@ -21,8 +30,7 @@ class StreamPlatformSerializer(serializers.ModelSerializer):
         model = StreamPlatform
         fields = "__all__"        
     
-    
-        
+
     # def validate(self,data):
     #     if data.get('description') == data.get('name'):
     #         raise serializers.ValidationError("both description and name should not be same")

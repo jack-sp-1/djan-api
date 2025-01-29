@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator,MaxValueValidator
 # class Movie(models.Model):
 #     name = models.CharField(max_length=50)
 #     description = models.CharField(max_length=200)
@@ -7,7 +7,9 @@ from django.db import models
 
 #     def __str__(self):
 #         return self.name
-# 
+#
+
+
 
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30)
@@ -31,3 +33,19 @@ class WatchList(models.Model):
         return self.title
     
     
+class Review(models.Model):
+    #title = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    watchList = models.ForeignKey(WatchList, on_delete=models.CASCADE, related_name="reviews")
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    #user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    # comments = models.TextField()
+    # likes = models.IntegerField(default=0)
+    # dislikes = models.IntegerField(default=0)
+    # number_rating = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return str(self.rating) + " | " + self.watchList.title
